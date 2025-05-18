@@ -1,18 +1,47 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <title>The New York Times</title>
-    <link rel="stylesheet" href="../static/style.css">
-</head>
-<script src="../static/main.js"></script>
-<body>
-    {% if user %}
-        <h2>Logged in as {{ user['email'] }}</h2>
-        <a href="/logout">Logout</a>
-    {% else %}
-        <a href="/login">Login with Dex</a>
-    {% endif %}
-</body>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>NYTIMES</title>
+    </head>
+    
+    <body>
+        <!-- h1 with class "title-header" used to display the title New York Times at the top of the page -->
+        <header class="header-wrapper">
+        <div class="header-bar">
+            <div class="header-left">
+                <span id="date"></span>
+                <p>Today's Paper</p>
+            </div>
+        
+            <div class="header-center">
+                <h1 class="nyt-title">The New York Times</h1>
+            </div>
+        
+        </div>
+        </header>
+    <!--
+    
+    div with class "grid-container" contains the content of the grid
+    grid is used to split nested div containers into columns
+    
+    -->
+    <main>
+        <div class = "grid-container">
 
-<footer>
-</footer>
+            <!-- all nested div containers below are used to define the content in each column of the grid -->
+
+            <!-- left-col is used to define the left column of the grid -->
+            <div class= "left-col"></div>
+            <!-- mid-col is used to define the middle column of the grid -->
+            <div class = "mid-col"></div>
+            <!-- right-col is used to define the right column of the grid -->
+            <div class = "right-col"></div>
+        </div>
+    </main>
+    
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    </body>
+</html>

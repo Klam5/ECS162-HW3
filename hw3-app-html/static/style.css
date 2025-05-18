@@ -1,0 +1,254 @@
+/*
+    @font-face is used to define an imported font-family that I downloaded online called Chomsky. Learned how to do this from w3 link cited in html file
+*/
+
+@font-face {
+    font-family: "Chomsky";
+    src: url('/static/assets/font/chomsky/Chomsky.woff2');
+}
+
+/*
+    grid-container defines style for the grid-container class
+    sets display as a grid and sets up the layout of the grid to auto of 3 columns
+    gap and padding are set to 20px so that the content of each column is a bit away from the column border (as suggested by TAs)
+    max-width is set to 75% of the screen width to mimic the New York Times page which does not span the entire page
+    border-top and border-bottom are set to groove which creates the lines between the title at the top of the page and the footer at the bottom of the page
+    margin is set to 0 auto which means 0px for the top and bottom margin and auto for left and right margins which will center the content (grid)
+    font-family is set to Georgia as instructed by the TAs
+*/
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 20px;
+    padding: 20px;
+    max-width: 75%;
+    border-top: groove;
+    border-bottom: groove;
+    margin: 0 auto;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+/*
+    title-header is the class used for the header "New York Times" at the top of the page
+    the font Chomsky is the font I downloaded and created a font-face for. I set the font to Chomsky which is the font for the New York Times title
+    font is aligned to the center of the page
+    font size is also set to 100px
+*/
+/* 
+.title-header{
+    display: grid;
+    grid-column: 1fr 1fr 1fr 1fr;
+    font-family: "Chomsky";
+    font-weight: normal;
+    text-align: center;
+    font-size: 100px;
+}
+
+#date-today {
+    font-size: 0.6em;
+    font-weight: normal;
+    margin-left: 10px;
+    color: #555;
+} */
+
+/* works but date is directly to left of title */
+/* .title-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 20px;
+}
+
+.nyt-title {
+    font-family: "Chomsky";
+    font-weight: normal;
+    text-align: center;
+    font-size: 100px;
+}
+
+#date-today {
+    display: block;
+    font-size: 1rem;
+    font-family: Arial, sans-serif;
+    color: #444;
+    margin-top: 0.5rem;
+    text-align: left;
+} */
+
+
+
+
+
+
+
+
+.header-wrapper {
+    max-width: 75%;
+    margin: 0 auto;
+}
+.header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end; /* aligns all items to bottom edge */
+    padding: 0 20px;
+    margin: 0 20px;
+}
+
+.header-left {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: small;
+    font-weight: bold;
+    color: #444;
+}
+.header-left > p {
+    font-weight: 100;
+}
+
+.header-center {
+    flex: 1;
+    text-align: center;
+}
+
+.nyt-title {
+    font-family: "Chomsky", serif;
+    font-size: 80px;
+    font-weight: normal;
+    margin: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* setting display to block makes the entire body a block element preventing horizontal scrolling */
+body {
+    display: block;
+}
+
+/*
+    width is set to 100% so it spans the width of their respective grid column
+    margin being set to 0 auto makes it so that the image is centered in their column
+    height is displayed as auto so that it can grow and shrink with the screen's width
+*/
+img {
+    width: 100%;
+    margin: 0 auto;
+    height: auto;
+    display: block;
+}
+
+
+/*
+    left-col class takes care of the left column of the grid
+    as default, create a solid border on the right side of the column to separate this column with the middle column
+    setting the right padding to 10px makes it so that the content in the left column has a little space between the border. without this, content would touch the border
+*/
+.left-col {
+    border-right: 1px solid #090909;
+    padding-right: 20px;
+}
+
+/* right-col same as left col except creates a border and padding on the left side to separate this column from middle column */
+.right-col {
+    border-left: 1px solid #090909;
+    padding-left: 20px;
+}
+
+/* this block sets the font size to 30px for all columns */
+.left-col, .mid-col, .right-col {
+    font-size: 30px;
+}
+
+/*
+    h2 tag is used to print the "title" or "head" in each column as if it were the title/head of an article in the column
+    text align is set to center so that each h2 tag content is centered within their respective column
+*/
+h2 {
+    text-align: center;
+}
+
+/*
+    this media query takes care of screen sizes between 768 and 1024 pixels
+    title header font size is set to 8vw so that it changes sizes with the width of the screen (learned from w3 site linked in html file)
+    all column grid areas were changes so that the left and middle columns exist in row 1 column 1 and 2 respectively while right column exists in row 2 column 1
+    
+    right column left border is set to none to get rid of the previously existing border
+    left padding is set to 0px so that it gets rid of the existing 10px padding
+    creates top border to separate the right column (now in the row below) from the first row (columns 1 and 2)
+*/
+@media only screen and (768px <= width <= 1024px){
+    /* grid area: row start / column start / row span / column span */
+    .title-header{
+        font-size: 8vw;
+    }
+    .left-col {
+        grid-area: 1 / 1 / span 1;
+    }
+    .mid-col {
+        grid-area: 1 / 2 / span 1;
+    }
+    .right-col {
+        grid-area: 2 / 1 / span 1;
+        border-left: none;
+        padding-left: 0px;
+        border-top: groove;
+    }
+
+    .header-left{
+        display: none;
+    }
+}
+
+/*
+    this media query takes care of screens of widths less than 768px
+    like to the query above, title header font size is set to 8vw
+
+    this query seeks to set up the page so that it is one column but 3 rows, everything is visible as you scroll down
+    in left-col we want to start at row 1 column 1, get rid of the right border and set left and right paddings to make both sides of the column even
+
+    in the mid-col we start at row 2 column 1, set a top border to separate with the content of left-col and set padding for left, right, and bottom to space things out evenly
+
+    in right-col we start at row 3 column 1, get rid of the left border and add a top border to separate from the mid-col content and set padding for the left and right again
+
+    while testing, I noticed that some content was not evenly centered and realized that the gap I previously initialized was the reason so I set the gap of grid-container to 0px and that fixed my issue
+*/
+@media only screen and (width < 768px){
+    .title-header {
+        font-size: 8vw;
+    }
+    .left-col {
+        grid-area: 1 / 1 / span 1;
+        border-right: none;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .mid-col {
+        grid-area: 2 / 1 / span 1;
+        border-top: groove;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom: 10px;
+    }
+    .right-col {
+        grid-area: 3 / 1 / span 1;
+        border-left: none;
+        border-top: groove;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .grid-container {
+        gap: 0px;
+    }
+    .header-left{
+        display: none;
+    }
+}
