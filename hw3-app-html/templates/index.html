@@ -8,6 +8,29 @@
     </head>
     
     <body>
+        <div id="account-sidebar" class="sidebar hidden">
+            <div class="sidebar-inner">
+                <div class ="sidebar-header">
+                    <span class="sidebar-email">{{ user.email }}</span>
+                    <button id="close-sidebar">X</button>
+                </div>
+                <p class="sidebar-welcome"> Good Afternoon!</p>>
+                <div class="logout-container">
+                    <a href="/logout">Log out</a>
+                </div>
+            </div>
+        </div>
+        <div id="comment-sb" class="sidebar hidden">
+            <div class ="sidebarinner">
+                <div class="sidebarhdr">
+                    <span>Comments</span>
+                    <button id="close-commentsb">X</button>
+                </div>
+                <div class="comments-content">
+                    <p>n/a</p>
+                </div>
+            </div>
+        </div>
         <!-- h1 with class "title-header" used to display the title New York Times at the top of the page -->
         <header class="header-wrapper">
         <div class="header-bar">
@@ -19,7 +42,13 @@
             <div class="header-center">
                 <h1 class="nyt-title">The New York Times</h1>
             </div>
-        
+            <div class="header-right">
+                {% if user %}
+                    <button id="account-btn">Account</button>
+                {% else %}
+                    <a href="/login">Login</a>
+                {% endif %}
+            </div>
         </div>
         </header>
     <!--

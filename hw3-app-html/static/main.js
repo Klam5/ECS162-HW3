@@ -25,9 +25,14 @@ fetch("/api/news")
             }
             //Adds article into html format via imageurl, headline, and the snippet
             const articleHTML = `
-                <h2>${headline}</h2>
-                ${imageUrl ? `<img src="${imageUrl}" alt= "Da Image">` : ""}
-                <p>${snippet}</p>
+                <div class="articlewrap">
+                    <h2>${headline}</h2>
+                    ${imageUrl ? `<img src="${imageUrl}" alt= "Da Image">` : ""}
+                    <p>${snippet}</p>
+                    <button class='commentbuttn'>
+                        <span class="comment-count">106</span>
+                    </button>
+                </div>
             `;
             //Puts the info from articleHTML into the HTML columns
             col.innerHTML = articleHTML;
@@ -55,4 +60,29 @@ document.addEventListener("DOMContentLoaded", () => {
     const formattedDate = today.toLocaleDateString(undefined, data);
     //sets the textcontent
     date.textContent = `${formattedDate}`
-})
+    const sidebar = document.getElementById("account-sidebar");
+    const accountBtn = document.getElementById("account-btn");
+    const closeBtn = document.getElementById("close-sidebar");
+    const commentSidebar = document.getElementById("comment-sb");
+    const closeCommentSidebar = document.getElementById("close-commentsb");
+    if(accountBtn) {
+        accountBtn.addEventListener("click", () => {
+            sidebar.classList.remove("hidden");
+        });
+    }
+    if(closeBtn) {
+        closeBtn.addEventListener("click", () => {
+            sidebar.classList.add("hidden");
+        })
+    }
+    document.body.addEventListener("click", function (event) {
+        if(event.target.closest(".commentbuttn")) {
+            commentSidebar.classList.remove("hidden");
+        }
+    });
+    if(closeCommentSidebar) {
+        closeCommentSidebar.addEventListener("click", () => {
+            commentSidebar.classList.add("hidden");
+        });
+    }
+});

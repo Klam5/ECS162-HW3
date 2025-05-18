@@ -252,3 +252,57 @@ h2 {
         display: none;
     }
 }
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 20%;
+    background-color: white;
+    border-left: 1px solid #ccc;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    z-index: 999;
+}
+.sidebar.hidden {
+    display: none;
+}
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+}
+.sidebar-inner {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+.sidebar-email {
+    font-size: 14px;
+    font-weight: bold;
+}
+.sidebar-welcome {
+    margin-top: 10px;
+    margin-bottom: auto;
+}
+.logout-container {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+}
+.articlewrap {
+    position: relative;
+    padding-bottom: 40px;
+    min-height: 300px;
+}
+.commentbuttn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-size: 14px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
