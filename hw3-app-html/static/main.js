@@ -1,6 +1,7 @@
 // https://developer.nytimes.com/docs/articlesearch-product/1/overview
 // https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector
 
+
 fetch("/api/news")
     .then(res => res.json())                                //Turns response into json format
     .then(data => {                                     //If data then...

@@ -67,7 +67,7 @@ if __name__ == '__main__':
 # https://developer.nytimes.com/docs/articlesearch-product/1/overview
 
 # from flask import Flask, render_template, jsonify #Imports flask, render template for HTML file, jsonify to send JSON back and forth
-# import os       #used to read env variables 
+# import os       #used to read env variables
 # import requests #sends requests
 # import json
 # from dotenv import load_dotenv  #loads env file
