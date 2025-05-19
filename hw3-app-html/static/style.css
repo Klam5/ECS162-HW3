@@ -78,7 +78,12 @@
 
 
 
-
+/*
+    Specifies comment list styling
+    Delete comment styling for red texts
+    Adds padding, margins, and gaps for spacing and header specifications
+    Login button display
+*/
 .comments-list p {
     display: flex;
     justify-content: space-between;
@@ -86,6 +91,7 @@
     margin-bottom: 8px;
     gap: 10px;
     word-break: break-word;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 .comments-list p strong {
@@ -282,6 +288,9 @@ h2 {
         display: none;
     }
 }
+
+/*Sidebar styling specifications so bar appears in 20% of screen and is fixed
+Adds borders */
 .sidebar {
     position: fixed;
     top: 0;
@@ -296,15 +305,25 @@ h2 {
     flex-direction: column;
     z-index: 999;
 }
+/*Hides sidebar when needed*/
 .sidebar.hidden {
     display: none;
 }
+/*Sidebar header specifications*/
 .sidebar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-weight: bold;
+    border-bottom: 1px solid black;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
 }
+/*Inner sidebar specification, logout, articlewraps for formatting, comment button
+    Commontbutton-> appears absolute and in bottom right
+    articlewrap adds article block and adds padding
+    Display for email text
+*/
 .sidebar-inner {
     position: relative;
     height: 100%;
@@ -313,10 +332,14 @@ h2 {
 .sidebar-email {
     font-size: 14px;
     font-weight: bold;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
 }
 .sidebar-welcome {
     margin-top: 10px;
+    font-weight: bold;
     margin-bottom: auto;
+    font-size: 50px;
 }
 .logout-container {
     position: absolute;
@@ -335,4 +358,6 @@ h2 {
     font-size: 14px;
     padding: 5px 10px;
     cursor: pointer;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
 }

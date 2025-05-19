@@ -65,53 +65,61 @@ document.addEventListener("DOMContentLoaded", () => {
     const formattedDate = today.toLocaleDateString(undefined, data);
     //sets the textcontent
     date.textContent = `${formattedDate}`
+    //Gets elements for sidebars ands buttons
     const sidebar = document.getElementById("account-sidebar");
     const accountBtn = document.getElementById("account-btn");
     const closeBtn = document.getElementById("close-sidebar");
     const commentSidebar = document.getElementById("comment-sb");
     const closeCommentSidebar = document.getElementById("close-commentsb");
+    //If account button pressed, show it 
     if(accountBtn) {
         accountBtn.addEventListener("click", () => {
             sidebar.classList.remove("hidden");
         });
     }
+    //If close button pressed, hide sidebar 
     if(closeBtn) {
         closeBtn.addEventListener("click", () => {
             sidebar.classList.add("hidden");
         })
     }
+    //Shows the sidebar when comment buttons are clicked
     document.body.addEventListener("click", function (event) {
         if(event.target.closest(".commentbuttn")) {
             commentSidebar.classList.remove("hidden");
         }
     });
+    //Closes comment sidebar when clicked x
     if(closeCommentSidebar) {
         closeCommentSidebar.addEventListener("click", () => {
             commentSidebar.classList.add("hidden");
         });
     }
 });
-
+//Asyncronously loads comments given articleID
 async function loadComments(articleId) {
+    //Awaits for fetching comments 
     const res = await fetch(`/api/comments?article_id=${encodeURIComponent(articleId)}`);
     const comments = await res.json();
-    const commentList = document.querySelector(".comments-list");
-    commentList.innerHTML = "";
+    const commentList = document.querySelector(".comments-list"); //Lists comments
+    commentList.innerHTML = ""; //Clearscomment list
     
     // if (!Array.isArray(comments)) {
     //     commentList.innerHTML = "<p>Error Loading Comments</p>"
     //     return
     // }
+    //If no comments, displays no comments
     if(comments.length === 0) {
         commentList.innerHTML = "<p>No Comments Yet</p>";
         return;
     }
-
+    //Renders all the comments by creating and displaying
     comments.forEach(comment => {
         const p = document.createElement("p");
+        //If owner or mod, set to email or moderator@hw3.com
         const isOwner = comment.user_email === window.CURRENT_USER.email;
         const isMod = window.CURRENT_USER.email === "moderator@hw3.com";
-
+        //Comment HTML
         p.innerHTML = `
             <span>
                 <strong>${comment.user_email || "anonymous"}:</strong>
@@ -119,15 +127,16 @@ async function loadComments(articleId) {
             <span class="comment-text">${comment.content}</span>
             ${(isOwner || isMod) ? `<button class = "delete-comment" data-comment-id="${comment._id}">Delete</button>`: ""}
         `;
+        //Adds comment to the list
         commentList.appendChild(p);
     })
-
+    //Delete comment functionality
     document.querySelectorAll(".delete-comment").forEach(button => {
         button.addEventListener("click", async () => {
             const commentId = button.getAttribute("data-comment-id");
             const confirmDelete = confirm("Delete this comment?");
             if (!confirmDelete) return;
-
+    
             const res = await fetch(`/api/comments/${commentId}`, {
                 method: "DELETE"
             });
@@ -139,23 +148,26 @@ async function loadComments(articleId) {
         });
     });
 }
-
+//Click on any document bodies
 document.body.addEventListener("click", function(event){
     const commentButton = event.target.closest(".commentbuttn");
+    //If comment button pressed
     if(commentButton) {
         const commentSidebar = document.getElementById("comment-sb");
-        commentSidebar.classList.remove("hidden");
+        commentSidebar.classList.remove("hidden"); //Removes hidden to show comment sidebar
+        //Gets article respective to comments
         const articleId = commentButton.closest(".articlewrap").getAttribute("data-article-id");
         document.getElementById("article-id").value = articleId;
-
+        //loads comments for article
         loadComments(articleId)
     }
 })
-
+//Adds a new comment
 document.getElementById("comment-form").addEventListener("submit", async(e) => {
-    e.preventDefault();
-    const articleId = document.getElementById("article-id").value;
-    const commentText = document.getElementById("comment-text").value;
+    e.preventDefault(); //Stops default form submit behavior
+    const articleId = document.getElementById("article-id").value;  //Gets respective article id
+    const commentText = document.getElementById("comment-text").value;  //Gets comment content
+    //Sends comment data to backend
     const res = await fetch("/api/comments", {
         method: "POST",
         headers: {
@@ -167,7 +179,7 @@ document.getElementById("comment-form").addEventListener("submit", async(e) => {
         })
     });
     const result = await res.json();
-    alert(result.message || result.error);
+    alert(result.message || result.error);  //Shows response method
     if(res.ok) {
         document.getElementById("comment-text").value = "";
         loadComments(articleId)

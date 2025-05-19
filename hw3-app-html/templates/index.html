@@ -8,18 +8,20 @@
     </head>
     
     <body>
+        <!-- Account sidebar management, prints out email top left then greeting. Gives option to close and log out-->
         <div id="account-sidebar" class="sidebar hidden">
             <div class="sidebar-inner">
                 <div class ="sidebar-header">
                     <span class="sidebar-email">{{ user.email }}</span>
                     <button id="close-sidebar">X</button>
                 </div>
-                <p class="sidebar-welcome"> Good Afternoon!</p>>
+                <p class="sidebar-welcome"> Good Afternoon!</p>
                 <div class="logout-container">
                     <button class="logout-btn"><a href="/logout">Log out</a></button>
                 </div>
             </div>
         </div>
+        <!-- Comment sidebar, allows user to post comments, close comments,-->
         <div id="comment-sb" class="sidebar hidden">
             <div class ="sidebarinner">
                 <div class="sidebarhdr">
