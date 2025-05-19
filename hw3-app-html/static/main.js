@@ -98,22 +98,43 @@ async function loadComments(articleId) {
     const commentList = document.querySelector(".comments-list");
     commentList.innerHTML = "";
     
+    // if (!Array.isArray(comments)) {
+    //     commentList.innerHTML = "<p>Error Loading Comments</p>"
+    //     return
+    // }
     if(comments.length === 0) {
         commentList.innerHTML = "<p>No Comments Yet</p>";
         return;
     }
-    if(!Array.isArray(comments)){
-        commentList.innerHTML = "<p>Error Loading Comments</p>";
-        return;
-    }
-
-
 
     comments.forEach(comment => {
         const p = document.createElement("p");
-        p.innerHTML = `<strong>${comment.user_email || "anonymous"}:</strong> ${comment.content}`;
+        const isOwner = comment.user_email === window.CURRENT_USER.email;
+        const isMod = window.CURRENT_USER.email === "moderator@hw3.com";
+
+        p.innerHTML = `
+            <strong>${comment.user_email || "anonymous"}:</strong> ${comment.content}
+            ${(isOwner || isMod) ? `<button class = "delete-comment" data-comment-id="${comment._id}">Delete</button>`: ""}
+        `;
         commentList.appendChild(p);
     })
+
+    document.querySelectorAll(".delete-comment").forEach(button => {
+        button.addEventListener("click", async () => {
+            const commentId = button.getAttribute("data-comment-id");
+            const confirmDelete = confirm("Delete this comment?");
+            if (!confirmDelete) return;
+
+            const res = await fetch(`/api/comments/${commentId}`, {
+                method: "DELETE"
+            });
+
+            const result = await res.json();
+            alert(result.message || result.error);
+
+            if (res.ok) loadComments(articleId);
+        });
+    });
 }
 
 document.body.addEventListener("click", function(event){

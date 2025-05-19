@@ -77,5 +77,10 @@
     </main>
     
     <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <script>
+        window.CURRENT_USER = {
+            email: "{{user.email if user else ''}}"
+        };
+    </script>
     </body>
 </html>

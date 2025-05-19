@@ -6,7 +6,7 @@ import os
 import requests #sends requests
 import json
 from dotenv import load_dotenv  #loads env file
-
+from bson.objectid import ObjectId
 import pymongo
 from pymongo import MongoClient
 
@@ -133,6 +133,35 @@ def get_comments():
         c["_id"] = str(c["_id"])
     return jsonify(comment_list)
 
+@app.route('/api/comments/<comment_id>', methods=["DELETE"])
+def delete_comment(comment_id):
+    user = session.get("user", {})
+    email = user.get("email")
+    if not email:
+        return jsonify({"error": "Unauthorized"})
+    
+    comment = comments_collection.find_one({"_id": ObjectId(comment_id)})
+    if not comment:
+        return jsonify({"error": "Comment not Found"})
+    is_owner = comment["user_email"] == email
+    is_mod = email == "moderator@hw3.com"
+
+    if not is_owner and not is_mod:
+        return jsonify({"error": "Forbidden"})
+    
+    result = comments_collection.delete_one({"_id": ObjectId(comment_id)})
+    if result.deleted_count == 1:
+        return jsonify({"message": "Comment deleted"})
+    else:
+        return jsonify({"error": "Failed to Delete Message"})
+    # if email != "moderator@hw3.com":
+    #     return jsonify({"error": "Unauthorized"})
+    
+    # result = comments_collection.delete_one({"_id": ObjectId(comment_id)})
+    # if result.deleted_count == 1:
+    #     return jsonify({"message": "Comment Deleted"})
+    # else:
+    #     return jsonify({"error": "Comment not found"})
 # https://flask.palletsprojects.com/en/stable/quickstart/
 # https://flask.palletsprojects.com/en/stable/api/#flask.jsonify
 # https://developer.nytimes.com/docs/articlesearch-product/1/overview
