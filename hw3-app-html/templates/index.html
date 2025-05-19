@@ -16,7 +16,7 @@
                 </div>
                 <p class="sidebar-welcome"> Good Afternoon!</p>>
                 <div class="logout-container">
-                    <a href="/logout">Log out</a>
+                    <button><a href="/logout">Log out</a></button>
                 </div>
             </div>
         </div>
@@ -27,7 +27,12 @@
                     <button id="close-commentsb">X</button>
                 </div>
                 <div class="comments-content">
-                    <p>n/a</p>
+                    <div class="comments-list"></div>
+                        <form id="comment-form">
+                            <textarea id="comment-text" rows="1" placeholder="Add a Comment..." required></textarea>
+                            <input type="hidden" id="article-id" value="">
+                            <button type="submit">Post Comment</button>
+                        </form>
                 </div>
             </div>
         </div>

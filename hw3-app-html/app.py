@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, redirect, render_template, session
+from flask import Flask, jsonify, redirect, render_template, session, request, url_for
 from authlib.integrations.flask_client import OAuth
 from authlib.common.security import generate_token
 from flask_cors import CORS
@@ -6,6 +6,18 @@ import os
 import requests #sends requests
 import json
 from dotenv import load_dotenv  #loads env file
+
+import pymongo
+from pymongo import MongoClient
+
+# dont know if needed
+from dotenv import load_dotenv
+
+# from flask_oidc import OpenIDConnect
+# import pymongo
+# from pymongo import MongoClient
+# from functools import wraps
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -52,12 +64,37 @@ def login():
 
 @app.route('/authorize')
 def authorize():
+    # load_dotenv()
+    # uri = os.getenv("URI")
+    # cluster = MongoClient(uri)
+    # db = cluster["users"]
+    # reg_user_collection = db["regular"]
+    # admin_user_collection = db["admins"]
+
     client = oauth.create_client(os.getenv("OIDC_CLIENT_NAME"))
     token = client.authorize_access_token()
     nonce = session.get('nonce')
 
     user_info = client.parse_id_token(token, nonce=nonce)  # or use .get('userinfo').json()
     session['user'] = user_info
+    # email = user_info.get("email")
+
+    # if not email:
+    #     return "Email not provided"
+    
+    # is_admin = admin_user_collection.find_one({"email": email})
+    # is_reg = reg_user_collection.find_one({"email": email})
+    # if not is_admin and not is_reg:
+    #     if email.endswith("@moderator.com"):
+    #         admin_user_collection.insert_one({
+    #             "email": email
+    #         })
+    #     else:
+    #         reg_user_collection.insert_one({
+    #             "email": email
+    #         })
+    # else:
+    #     session['user']['role'] = 'admin' if is_admin else 'regular'
     return redirect('/')
 
 @app.route('/logout')
@@ -66,8 +103,35 @@ def logout():
     return redirect('/')
 
 
+uri = os.getenv("URI")
+cluster = MongoClient(uri)
+db = cluster["Comments"]
+comments_collection = db["comments"]
 
+@app.route('/api/comments', methods=["POST"])
+def add_comment():
+    if "user" not in session:
+        return jsonify({"error": "Unauthorized"})
+    data = request.json
+    article_id = data.get("article_id")
+    content = data.get("content")
+    # if not article_id or not content:
+    #     return jsonify({"error": "Missing Data"})
+    comment = {
+        "article_id": article_id,
+        "content": content,
+        "user_email": session["user"]["email"]
+    }
+    comments_collection.insert_one(comment)
+    return jsonify({"message": "Comment Posted"})
 
+@app.route("/api/comments", methods=["GET"])
+def get_comments():
+    article_id = request.args.get("article_id")
+    comment_list = list(db["comments"].find({"article_id": article_id}))
+    for c in comment_list:
+        c["_id"] = str(c["_id"])
+    return jsonify(comment_list)
 
 # https://flask.palletsprojects.com/en/stable/quickstart/
 # https://flask.palletsprojects.com/en/stable/api/#flask.jsonify
@@ -79,24 +143,24 @@ def logout():
 
 @app.route('/api/news')                     #apinews route used by js
 def news():
-     #Base url for NYT article searchapi
-     url = "https://api.nytimes.com/svc/search/v2/articlesearch.json"
-     #Search Paramaters to control article searching 
-     searchparams = {
-         #Filter query to control location to Davis or Sacramento only 
-         "fq": "timesTag.location.contains:(Davis OR Sacramento)",
-         #Uses API key we received from env earlier
-         "api-key": NYT_API_KEY,
-         #Sort by recency
-         "sort": "newest"
-     }
-     #debug
-     #respoone = requests.get(url, params=searchparams)
-     print("NYT_API_KEY:", NYT_API_KEY)
-     #Get request to API with the parameters to get article data
-     response = requests.get(url, params=searchparams)
-     #Returns jsonified version of data
-     return jsonify(response.json())
+    #Base url for NYT article searchapi
+    url = "https://api.nytimes.com/svc/search/v2/articlesearch.json"
+    #Search Paramaters to control article searching 
+    searchparams = {
+        #Filter query to control location to Davis or Sacramento only 
+        "fq": "timesTag.location.contains:(Davis OR Sacramento)",
+        #Uses API key we received from env earlier
+        "api-key": NYT_API_KEY,
+        #Sort by recency
+        "sort": "newest"
+    }
+    #debug
+    #respoone = requests.get(url, params=searchparams)
+    print("NYT_API_KEY:", NYT_API_KEY)
+    #Get request to API with the parameters to get article data
+    response = requests.get(url, params=searchparams)
+    #Returns jsonified version of data
+    return jsonify(response.json())
 
 @app.route('/api/key')
 def get_api_key():

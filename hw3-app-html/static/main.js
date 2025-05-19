@@ -17,6 +17,10 @@ fetch("/api/news")
             const headline = article.headline.main; //Collects headline from current article object
             const snippet = article.snippet         //Collects snippet from current article object
 
+            const rawId = article._id;
+            const articleId = rawId.replace(/"/g, "&quot;").replace(/\//g, "-");
+
+
             let imageUrl = null                     //Nulls imageurl just in case of no image
             //If multimedia object, if default, and if the default url, then there is an image available to process and put on our site 
             if(article.multimedia && article.multimedia.default && article.multimedia.default.url) {
@@ -25,15 +29,16 @@ fetch("/api/news")
             }
             //Adds article into html format via imageurl, headline, and the snippet
             const articleHTML = `
-                <div class="articlewrap">
+                <div class="articlewrap" data-article-id=${articleId}>
                     <h2>${headline}</h2>
                     ${imageUrl ? `<img src="${imageUrl}" alt= "Da Image">` : ""}
                     <p>${snippet}</p>
                     <button class='commentbuttn'>
-                        <span class="comment-count">106</span>
+                        <span class="comment-count">Comments</span>
                     </button>
                 </div>
             `;
+            console.log("rendering: ", articleId)
             //Puts the info from articleHTML into the HTML columns
             col.innerHTML = articleHTML;
         });
@@ -84,5 +89,63 @@ document.addEventListener("DOMContentLoaded", () => {
         closeCommentSidebar.addEventListener("click", () => {
             commentSidebar.classList.add("hidden");
         });
+    }
+});
+
+async function loadComments(articleId) {
+    const res = await fetch(`/api/comments?article_id=${encodeURIComponent(articleId)}`);
+    const comments = await res.json();
+    const commentList = document.querySelector(".comments-list");
+    commentList.innerHTML = "";
+    
+    if(comments.length === 0) {
+        commentList.innerHTML = "<p>No Comments Yet</p>";
+        return;
+    }
+    if(!Array.isArray(comments)){
+        commentList.innerHTML = "<p>Error Loading Comments</p>";
+        return;
+    }
+
+
+
+    comments.forEach(comment => {
+        const p = document.createElement("p");
+        p.innerHTML = `<strong>${comment.user_email || "anonymous"}:</strong> ${comment.content}`;
+        commentList.appendChild(p);
+    })
+}
+
+document.body.addEventListener("click", function(event){
+    const commentButton = event.target.closest(".commentbuttn");
+    if(commentButton) {
+        const commentSidebar = document.getElementById("comment-sb");
+        commentSidebar.classList.remove("hidden");
+        const articleId = commentButton.closest(".articlewrap").getAttribute("data-article-id");
+        document.getElementById("article-id").value = articleId;
+
+        loadComments(articleId)
+    }
+})
+
+document.getElementById("comment-form").addEventListener("submit", async(e) => {
+    e.preventDefault();
+    const articleId = document.getElementById("article-id").value;
+    const commentText = document.getElementById("comment-text").value;
+    const res = await fetch("/api/comments", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            article_id: articleId,
+            content: commentText
+        })
+    });
+    const result = await res.json();
+    alert(result.message || result.error);
+    if(res.ok) {
+        document.getElementById("comment-text").value = "";
+        loadComments(articleId)
     }
 });
