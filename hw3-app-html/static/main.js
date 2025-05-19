@@ -113,7 +113,10 @@ async function loadComments(articleId) {
         const isMod = window.CURRENT_USER.email === "moderator@hw3.com";
 
         p.innerHTML = `
-            <strong>${comment.user_email || "anonymous"}:</strong> ${comment.content}
+            <span>
+                <strong>${comment.user_email || "anonymous"}:</strong>
+            </span>
+            <span class="comment-text">${comment.content}</span>
             ${(isOwner || isMod) ? `<button class = "delete-comment" data-comment-id="${comment._id}">Delete</button>`: ""}
         `;
         commentList.appendChild(p);

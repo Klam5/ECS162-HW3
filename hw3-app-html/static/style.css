@@ -79,9 +79,39 @@
 
 
 
+.comments-list p {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    gap: 10px;
+    word-break: break-word;
+}
 
+.comments-list p strong {
+    margin-right: 10px;
+}
 
+.comments-list p span.comment-text {
+    flex: 1;
+}
 
+.delete-comment {
+    background: none;
+    color: red;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+#account-btn, #login-btn, .logout-btn {
+    margin: 10px;
+}
+
+#login-btn > a, .logout-btn > a{
+    text-decoration: none;
+    color: inherit;
+}
 
 .header-wrapper {
     max-width: 75%;
@@ -257,7 +287,7 @@ h2 {
     top: 0;
     right: 0;
     height: 100%;
-    width: 20%;
+    width: 35%;
     background-color: white;
     border-left: 1px solid #ccc;
     box-shadow: -2px 0 5px rgba(0,0,0,0.1);

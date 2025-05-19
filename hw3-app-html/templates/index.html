@@ -16,7 +16,7 @@
                 </div>
                 <p class="sidebar-welcome"> Good Afternoon!</p>>
                 <div class="logout-container">
-                    <button><a href="/logout">Log out</a></button>
+                    <button class="logout-btn"><a href="/logout">Log out</a></button>
                 </div>
             </div>
         </div>
@@ -51,7 +51,9 @@
                 {% if user %}
                     <button id="account-btn">Account</button>
                 {% else %}
-                    <a href="/login">Login</a>
+                    <button id="login-btn">
+                        <a href="/login">Login</a>
+                    </button>
                 {% endif %}
             </div>
         </div>
