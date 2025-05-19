@@ -1,0 +1,9 @@
+1.	What AI tool did you use?
+Coursassist, ChatGPT
+2.	How did you use it? What kind of questions did you ask? (include links to your conversation if applicable)
+Used coursassist solely to ask: What is Homework 3 about, and could you provide a detailed step-by-step guide on how to complete it effectively?
+
+Used chat to error check and spot formatting issues (such as the x for sidebar not being in the right spot and the logout button not appearing in our sidebar).
+In addition, we used it to learn mongodb for pushing and pulling data from the servers. We also used Courseassist on how to setup mongodb and if we need to create new users.
+3.	How much did it help you? How helpful and accurate was it?
+It helped a lot, sometimes it wasn’t completely accurate but overall, it led to helping us complete it faster under tight time conditions. It gave us very good advice that helped us start and finish up.
